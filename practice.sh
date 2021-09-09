@@ -1,5 +1,5 @@
 #!/bin/bash
-read -p "Enter any value : " value 
+read -p "Enter any value :\t" value 
 if [ $value -eq 100 ];
 then
    echo "value is eq 100"
