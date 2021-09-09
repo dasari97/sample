@@ -1,9 +1,9 @@
 #!/bin/bash
-value=$1
-if [ $value -eq 100];
+read -p "Enter any value" value 
+if [ $value -eq 100 ];
 then
    echo "value is eq 100"
-elif [ $value -gt 100];
+elif [ $value -gt 100 ];
 then
     echo "value is gt 100"
 else 
