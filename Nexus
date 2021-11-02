@@ -1,9 +1,32 @@
 #!/bin/bash
 
-sudo yum list installed | grep java* 
-if [ $? == 0 ];then
-sudo yum remove java* -y
-else
-sudo yum install install java-1.8.0-openjdk.x86_64 -y
+if [ $UID -ne 0 ];
+    then 
+            echo -e "\e[1;31mPremission deined. Need to be a ROOT user to execute this command\e[0m"
+        exit 1
 fi
+
+#installing Java
+yum install install java-1.8.0-openjdk.x86_64 -y
+
+#Downloading Nexus tar file and extracting it.
+cd /opt
+wget https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-3.0.2-02-unix.tar.gz
+tar -ozxvf nexus-3.0.2-02-unix.tar.gz
+mv /opt/nexus-3.0.2-02 /opt/nexus
+
+#adding user to start the Nexus service
+adduser nexus
+sed -i -e '100 a nexus   ALL=(ALL)   ALL' /etc/sudoers
+chown -R nexus:nexus /opt/nexus
+
+#Setting up Nexus to run as nexus user
+sed -i -e "1 c run_as_user="nexus"" /opt/nexus/bin/nexus.rc
+
+#Adding nexus as a service at boot time
+sudo ln -s /opt/nexus/bin/nexus /etc/init.d/nexus
+
+#Loging as nexus user to start service
+su - nexus
+systemctl start nexus
 
