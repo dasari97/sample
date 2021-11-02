@@ -1,0 +1,9 @@
+#!/bin/bash
+
+sudo yum list installed | grep java* 
+if [ $? == 0 ];then
+sudo yum remove java* -y
+else
+sudo yum install install java-1.8.0-openjdk.x86_64 -y
+fi
+
